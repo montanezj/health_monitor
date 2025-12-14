@@ -3,9 +3,11 @@ import json
 import random
 from kafka import KafkaProducer
 
-# 1. Connect to the Kafka "Pipe" running in Docker
+import os
+# specific to docker environment
+kafka_host = os.getenv('KAFKA_BROKER', 'localhost:9092')
 producer = KafkaProducer(
-    bootstrap_servers=['localhost:9092'],
+    bootstrap_servers=[kafka_host],
     value_serializer=lambda x: json.dumps(x).encode('utf-8')
 )
 

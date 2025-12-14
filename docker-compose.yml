@@ -12,12 +12,31 @@ services:
     depends_on:
       - zookeeper
     ports:
-      - "9092:9092"
+      - "9092:9092" # External access (Windows)
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      # This allows your Python script on Windows to connect via localhost
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
-      # This allows the container to accept traffic from outside
-      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      # 1. INTERNAL: Used by Producer/Consumer containers (kafka:29092)
+      # 2. EXTERNAL: Used by Windows/Localhost (localhost:9092)
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:29092,EXTERNAL://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  producer:
+    build: .
+    depends_on:
+      - kafka
+    # Connects to the INTERNAL port (29092)
+    command: ["sh", "-c", "sleep 10 && python producer.py"]
+    environment:
+      KAFKA_BROKER: "kafka:29092"
+
+  consumer:
+    build: .
+    depends_on:
+      - kafka
+    # Connects to the INTERNAL port (29092)
+    command: ["sh", "-c", "sleep 10 && python consumer.py"]
+    environment:
+      KAFKA_BROKER: "kafka:29092"

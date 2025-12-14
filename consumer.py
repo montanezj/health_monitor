@@ -1,10 +1,11 @@
 import json
 from kafka import KafkaConsumer
 
-# Initialize the consumer
+import os
+kafka_host = os.getenv('KAFKA_BROKER', 'localhost:9092')
 consumer = KafkaConsumer(
-    'server_health',   # <--- CORRECT NAME (matches producer.py)
-    bootstrap_servers='localhost:9092',
+    'server_health',
+    bootstrap_servers=kafka_host,
     auto_offset_reset='earliest',
     value_deserializer=lambda x: json.loads(x.decode('utf-8'))
 )
