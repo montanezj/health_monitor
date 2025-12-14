@@ -21,11 +21,12 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        pip install flake8 # Ensure flake8 is installed even if requirements.txt is missing
 
     - name: Lint with flake8
       run: |
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
 
     - name: Verify Docker Compose Config
-      run: docker-compose config
+      run: docker compose config  # <--- CHANGED THIS LINE
