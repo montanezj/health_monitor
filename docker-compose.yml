@@ -50,5 +50,18 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  grafana:
+    image: grafana/grafana:latest
+    depends_on:
+      - db
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+
 volumes:
   postgres_data:
+  grafana_data:
+
