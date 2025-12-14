@@ -29,7 +29,8 @@ It demonstrates a complete **DevOps lifecycle**:
 ---
 
 ## 📸 Dashboard Preview
-*(Replace this line with your screenshot: `![Dashboard](dashboard.png)`)*
+<img width="1943" height="605" alt="image" src="https://github.com/user-attachments/assets/dca69c52-7fcc-4ad3-97fc-5980b784df8a" />
+
 
 ---
 
